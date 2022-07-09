@@ -1,0 +1,93 @@
+buildscript {
+    ext {
+        // https://mvnrepository.com/artifact/com.google.protobuf/protobuf-bom
+        protobufVersion = '3.21.2'
+        // https://mvnrepository.com/artifact/com.google.protobuf/protobuf-gradle-plugin
+        protobufPluginVersion = '0.8.19'
+        // https://mvnrepository.com/artifact/io.grpc/grpc-bom
+        grpcVersion = '1.47.0'
+    }
+}
+
+plugins {
+    id 'java'
+    id "com.google.protobuf" version "${protobufPluginVersion}"
+}
+
+group = 'eu.suro.lmenu'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'papermc-repo'
+        url = 'https://repo.papermc.io/repository/maven-public/'
+    }
+    maven {
+        name = 'sonatype'
+        url = 'https://oss.sonatype.org/content/groups/public/'
+    }
+    maven { url 'https://jitpack.io' }
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:${protobufVersion}"
+    }
+    plugins {
+        grpc {
+            artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
+        }
+    }
+    generatedFilesBaseDir = "$projectDir/src"
+    generateProtoTasks {
+        all().each { task ->
+            task.plugins {
+                grpc {  }
+            }
+        }
+    }
+}
+
+
+sourceSets {
+    main {
+        proto {
+            srcDir "$projectDir/proto"
+        }
+    }
+}
+
+dependencies {
+    compileOnly 'com.destroystokyo.paper:paper-api:1.15.2-R0.1-SNAPSHOT'
+    implementation 'com.github.DevNatan:inventory-framework:2.5.1-rc.1'
+    implementation "io.grpc:grpc-netty:${grpcVersion}"
+    implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+    implementation "io.grpc:grpc-stub:${grpcVersion}"
+    implementation 'com.google.protobuf:protobuf-java:3.21.2'
+}
+
+def targetJavaVersion = 8
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+        options.release = targetJavaVersion
+    }
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
+    }
+}

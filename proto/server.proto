@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package server;
+option go_package = "eu.suro/launch/protos/server";
+
+service Server{
+    rpc CreateServer(CreateServerRequest) returns (Response) {}
+    rpc UpdateServer(UpdateServerRequest) returns (Response) {}
+    rpc DeleteServer(DeleteServerRequest) returns (Response) {}
+    rpc ListServers(Empty) returns (ListServersResponse) {}
+}
+
+message CreateServerRequest{
+    string name = 1;
+    int32  port = 2;
+    string version = 3;
+    bool save_world = 4;
+}
+
+message Empty{
+
+}
+
+message Response{
+    string status = 1;
+}
+
+message UpdateServerRequest{
+    int32 port = 1;
+    string message = 2;
+}
+
+message DeleteServerRequest{
+    int32 port = 1;
+}
+
+message ListServersResponse{
+    repeated ServerInfo servers = 1;
+}
+
+message ServerInfo{
+    int32  players = 1;
+    int32  maxplayers = 2;
+    string version = 3;
+    string owner_name = 4;
+    string status = 5;
+    string port = 6;
+}
