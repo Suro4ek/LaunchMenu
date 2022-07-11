@@ -31,28 +31,28 @@ public final class ServerOuterClass {
         getNameBytes();
 
     /**
-     * <code>int32 port = 2;</code>
-     * @return The port.
-     */
-    int getPort();
-
-    /**
-     * <code>string version = 3;</code>
+     * <code>string version = 2;</code>
      * @return The version.
      */
     java.lang.String getVersion();
     /**
-     * <code>string version = 3;</code>
+     * <code>string version = 2;</code>
      * @return The bytes for version.
      */
     com.google.protobuf.ByteString
         getVersionBytes();
 
     /**
-     * <code>bool save_world = 4;</code>
+     * <code>bool save_world = 3;</code>
      * @return The saveWorld.
      */
     boolean getSaveWorld();
+
+    /**
+     * <code>bool open = 4;</code>
+     * @return The open.
+     */
+    boolean getOpen();
   }
   /**
    * Protobuf type {@code server.CreateServerRequest}
@@ -107,20 +107,20 @@ public final class ServerOuterClass {
               name_ = s;
               break;
             }
-            case 16: {
-
-              port_ = input.readInt32();
-              break;
-            }
-            case 26: {
+            case 18: {
               java.lang.String s = input.readStringRequireUtf8();
 
               version_ = s;
               break;
             }
-            case 32: {
+            case 24: {
 
               saveWorld_ = input.readBool();
+              break;
+            }
+            case 32: {
+
+              open_ = input.readBool();
               break;
             }
             default: {
@@ -195,21 +195,10 @@ public final class ServerOuterClass {
       }
     }
 
-    public static final int PORT_FIELD_NUMBER = 2;
-    private int port_;
-    /**
-     * <code>int32 port = 2;</code>
-     * @return The port.
-     */
-    @java.lang.Override
-    public int getPort() {
-      return port_;
-    }
-
-    public static final int VERSION_FIELD_NUMBER = 3;
+    public static final int VERSION_FIELD_NUMBER = 2;
     private volatile java.lang.Object version_;
     /**
-     * <code>string version = 3;</code>
+     * <code>string version = 2;</code>
      * @return The version.
      */
     @java.lang.Override
@@ -226,7 +215,7 @@ public final class ServerOuterClass {
       }
     }
     /**
-     * <code>string version = 3;</code>
+     * <code>string version = 2;</code>
      * @return The bytes for version.
      */
     @java.lang.Override
@@ -244,15 +233,26 @@ public final class ServerOuterClass {
       }
     }
 
-    public static final int SAVE_WORLD_FIELD_NUMBER = 4;
+    public static final int SAVE_WORLD_FIELD_NUMBER = 3;
     private boolean saveWorld_;
     /**
-     * <code>bool save_world = 4;</code>
+     * <code>bool save_world = 3;</code>
      * @return The saveWorld.
      */
     @java.lang.Override
     public boolean getSaveWorld() {
       return saveWorld_;
+    }
+
+    public static final int OPEN_FIELD_NUMBER = 4;
+    private boolean open_;
+    /**
+     * <code>bool open = 4;</code>
+     * @return The open.
+     */
+    @java.lang.Override
+    public boolean getOpen() {
+      return open_;
     }
 
     private byte memoizedIsInitialized = -1;
@@ -272,14 +272,14 @@ public final class ServerOuterClass {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, name_);
       }
-      if (port_ != 0) {
-        output.writeInt32(2, port_);
-      }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(version_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, version_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, version_);
       }
       if (saveWorld_ != false) {
-        output.writeBool(4, saveWorld_);
+        output.writeBool(3, saveWorld_);
+      }
+      if (open_ != false) {
+        output.writeBool(4, open_);
       }
       unknownFields.writeTo(output);
     }
@@ -293,16 +293,16 @@ public final class ServerOuterClass {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, name_);
       }
-      if (port_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, port_);
-      }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(version_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, version_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, version_);
       }
       if (saveWorld_ != false) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(4, saveWorld_);
+          .computeBoolSize(3, saveWorld_);
+      }
+      if (open_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(4, open_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -321,12 +321,12 @@ public final class ServerOuterClass {
 
       if (!getName()
           .equals(other.getName())) return false;
-      if (getPort()
-          != other.getPort()) return false;
       if (!getVersion()
           .equals(other.getVersion())) return false;
       if (getSaveWorld()
           != other.getSaveWorld()) return false;
+      if (getOpen()
+          != other.getOpen()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -340,13 +340,14 @@ public final class ServerOuterClass {
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + NAME_FIELD_NUMBER;
       hash = (53 * hash) + getName().hashCode();
-      hash = (37 * hash) + PORT_FIELD_NUMBER;
-      hash = (53 * hash) + getPort();
       hash = (37 * hash) + VERSION_FIELD_NUMBER;
       hash = (53 * hash) + getVersion().hashCode();
       hash = (37 * hash) + SAVE_WORLD_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
           getSaveWorld());
+      hash = (37 * hash) + OPEN_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getOpen());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -482,11 +483,11 @@ public final class ServerOuterClass {
         super.clear();
         name_ = "";
 
-        port_ = 0;
-
         version_ = "";
 
         saveWorld_ = false;
+
+        open_ = false;
 
         return this;
       }
@@ -515,9 +516,9 @@ public final class ServerOuterClass {
       public server.ServerOuterClass.CreateServerRequest buildPartial() {
         server.ServerOuterClass.CreateServerRequest result = new server.ServerOuterClass.CreateServerRequest(this);
         result.name_ = name_;
-        result.port_ = port_;
         result.version_ = version_;
         result.saveWorld_ = saveWorld_;
+        result.open_ = open_;
         onBuilt();
         return result;
       }
@@ -570,15 +571,15 @@ public final class ServerOuterClass {
           name_ = other.name_;
           onChanged();
         }
-        if (other.getPort() != 0) {
-          setPort(other.getPort());
-        }
         if (!other.getVersion().isEmpty()) {
           version_ = other.version_;
           onChanged();
         }
         if (other.getSaveWorld() != false) {
           setSaveWorld(other.getSaveWorld());
+        }
+        if (other.getOpen() != false) {
+          setOpen(other.getOpen());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -685,40 +686,9 @@ public final class ServerOuterClass {
         return this;
       }
 
-      private int port_ ;
-      /**
-       * <code>int32 port = 2;</code>
-       * @return The port.
-       */
-      @java.lang.Override
-      public int getPort() {
-        return port_;
-      }
-      /**
-       * <code>int32 port = 2;</code>
-       * @param value The port to set.
-       * @return This builder for chaining.
-       */
-      public Builder setPort(int value) {
-        
-        port_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>int32 port = 2;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearPort() {
-        
-        port_ = 0;
-        onChanged();
-        return this;
-      }
-
       private java.lang.Object version_ = "";
       /**
-       * <code>string version = 3;</code>
+       * <code>string version = 2;</code>
        * @return The version.
        */
       public java.lang.String getVersion() {
@@ -734,7 +704,7 @@ public final class ServerOuterClass {
         }
       }
       /**
-       * <code>string version = 3;</code>
+       * <code>string version = 2;</code>
        * @return The bytes for version.
        */
       public com.google.protobuf.ByteString
@@ -751,7 +721,7 @@ public final class ServerOuterClass {
         }
       }
       /**
-       * <code>string version = 3;</code>
+       * <code>string version = 2;</code>
        * @param value The version to set.
        * @return This builder for chaining.
        */
@@ -766,7 +736,7 @@ public final class ServerOuterClass {
         return this;
       }
       /**
-       * <code>string version = 3;</code>
+       * <code>string version = 2;</code>
        * @return This builder for chaining.
        */
       public Builder clearVersion() {
@@ -776,7 +746,7 @@ public final class ServerOuterClass {
         return this;
       }
       /**
-       * <code>string version = 3;</code>
+       * <code>string version = 2;</code>
        * @param value The bytes for version to set.
        * @return This builder for chaining.
        */
@@ -794,7 +764,7 @@ public final class ServerOuterClass {
 
       private boolean saveWorld_ ;
       /**
-       * <code>bool save_world = 4;</code>
+       * <code>bool save_world = 3;</code>
        * @return The saveWorld.
        */
       @java.lang.Override
@@ -802,7 +772,7 @@ public final class ServerOuterClass {
         return saveWorld_;
       }
       /**
-       * <code>bool save_world = 4;</code>
+       * <code>bool save_world = 3;</code>
        * @param value The saveWorld to set.
        * @return This builder for chaining.
        */
@@ -813,12 +783,43 @@ public final class ServerOuterClass {
         return this;
       }
       /**
-       * <code>bool save_world = 4;</code>
+       * <code>bool save_world = 3;</code>
        * @return This builder for chaining.
        */
       public Builder clearSaveWorld() {
         
         saveWorld_ = false;
+        onChanged();
+        return this;
+      }
+
+      private boolean open_ ;
+      /**
+       * <code>bool open = 4;</code>
+       * @return The open.
+       */
+      @java.lang.Override
+      public boolean getOpen() {
+        return open_;
+      }
+      /**
+       * <code>bool open = 4;</code>
+       * @param value The open to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOpen(boolean value) {
+        
+        open_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bool open = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearOpen() {
+        
+        open_ = false;
         onChanged();
         return this;
       }
@@ -3853,6 +3854,12 @@ public final class ServerOuterClass {
      */
     com.google.protobuf.ByteString
         getPortBytes();
+
+    /**
+     * <code>bool open = 7;</code>
+     * @return The open.
+     */
+    boolean getOpen();
   }
   /**
    * Protobuf type {@code server.ServerInfo}
@@ -3935,6 +3942,11 @@ public final class ServerOuterClass {
               java.lang.String s = input.readStringRequireUtf8();
 
               port_ = s;
+              break;
+            }
+            case 56: {
+
+              open_ = input.readBool();
               break;
             }
             default: {
@@ -4145,6 +4157,17 @@ public final class ServerOuterClass {
       }
     }
 
+    public static final int OPEN_FIELD_NUMBER = 7;
+    private boolean open_;
+    /**
+     * <code>bool open = 7;</code>
+     * @return The open.
+     */
+    @java.lang.Override
+    public boolean getOpen() {
+      return open_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -4177,6 +4200,9 @@ public final class ServerOuterClass {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(port_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 6, port_);
       }
+      if (open_ != false) {
+        output.writeBool(7, open_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -4206,6 +4232,10 @@ public final class ServerOuterClass {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(port_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, port_);
       }
+      if (open_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(7, open_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -4233,6 +4263,8 @@ public final class ServerOuterClass {
           .equals(other.getStatus())) return false;
       if (!getPort()
           .equals(other.getPort())) return false;
+      if (getOpen()
+          != other.getOpen()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -4256,6 +4288,9 @@ public final class ServerOuterClass {
       hash = (53 * hash) + getStatus().hashCode();
       hash = (37 * hash) + PORT_FIELD_NUMBER;
       hash = (53 * hash) + getPort().hashCode();
+      hash = (37 * hash) + OPEN_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getOpen());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -4401,6 +4436,8 @@ public final class ServerOuterClass {
 
         port_ = "";
 
+        open_ = false;
+
         return this;
       }
 
@@ -4433,6 +4470,7 @@ public final class ServerOuterClass {
         result.ownerName_ = ownerName_;
         result.status_ = status_;
         result.port_ = port_;
+        result.open_ = open_;
         onBuilt();
         return result;
       }
@@ -4502,6 +4540,9 @@ public final class ServerOuterClass {
         if (!other.getPort().isEmpty()) {
           port_ = other.port_;
           onChanged();
+        }
+        if (other.getOpen() != false) {
+          setOpen(other.getOpen());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -4897,6 +4938,37 @@ public final class ServerOuterClass {
         onChanged();
         return this;
       }
+
+      private boolean open_ ;
+      /**
+       * <code>bool open = 7;</code>
+       * @return The open.
+       */
+      @java.lang.Override
+      public boolean getOpen() {
+        return open_;
+      }
+      /**
+       * <code>bool open = 7;</code>
+       * @param value The open to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOpen(boolean value) {
+        
+        open_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bool open = 7;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearOpen() {
+        
+        open_ = false;
+        onChanged();
+        return this;
+      }
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -4995,24 +5067,24 @@ public final class ServerOuterClass {
   static {
     java.lang.String[] descriptorData = {
       "\n\014server.proto\022\006server\"V\n\023CreateServerRe" +
-      "quest\022\014\n\004name\030\001 \001(\t\022\014\n\004port\030\002 \001(\005\022\017\n\007ver" +
-      "sion\030\003 \001(\t\022\022\n\nsave_world\030\004 \001(\010\"\007\n\005Empty\"" +
+      "quest\022\014\n\004name\030\001 \001(\t\022\017\n\007version\030\002 \001(\t\022\022\n\n" +
+      "save_world\030\003 \001(\010\022\014\n\004open\030\004 \001(\010\"\007\n\005Empty\"" +
       "\032\n\010Response\022\016\n\006status\030\001 \001(\t\"4\n\023UpdateSer" +
       "verRequest\022\014\n\004port\030\001 \001(\005\022\017\n\007message\030\002 \001(" +
       "\t\"#\n\023DeleteServerRequest\022\014\n\004port\030\001 \001(\005\":" +
       "\n\023ListServersResponse\022#\n\007servers\030\001 \003(\0132\022" +
-      ".server.ServerInfo\"t\n\nServerInfo\022\017\n\007play" +
-      "ers\030\001 \001(\005\022\022\n\nmaxplayers\030\002 \001(\005\022\017\n\007version" +
-      "\030\003 \001(\t\022\022\n\nowner_name\030\004 \001(\t\022\016\n\006status\030\005 \001" +
-      "(\t\022\014\n\004port\030\006 \001(\t2\210\002\n\006Server\022?\n\014CreateSer" +
-      "ver\022\033.server.CreateServerRequest\032\020.serve" +
-      "r.Response\"\000\022?\n\014UpdateServer\022\033.server.Up" +
-      "dateServerRequest\032\020.server.Response\"\000\022?\n" +
-      "\014DeleteServer\022\033.server.DeleteServerReque" +
-      "st\032\020.server.Response\"\000\022;\n\013ListServers\022\r." +
-      "server.Empty\032\033.server.ListServersRespons" +
-      "e\"\000B\036Z\034eu.suro/launch/protos/serverb\006pro" +
-      "to3"
+      ".server.ServerInfo\"\202\001\n\nServerInfo\022\017\n\007pla" +
+      "yers\030\001 \001(\005\022\022\n\nmaxplayers\030\002 \001(\005\022\017\n\007versio" +
+      "n\030\003 \001(\t\022\022\n\nowner_name\030\004 \001(\t\022\016\n\006status\030\005 " +
+      "\001(\t\022\014\n\004port\030\006 \001(\t\022\014\n\004open\030\007 \001(\0102\210\002\n\006Serv" +
+      "er\022?\n\014CreateServer\022\033.server.CreateServer" +
+      "Request\032\020.server.Response\"\000\022?\n\014UpdateSer" +
+      "ver\022\033.server.UpdateServerRequest\032\020.serve" +
+      "r.Response\"\000\022?\n\014DeleteServer\022\033.server.De" +
+      "leteServerRequest\032\020.server.Response\"\000\022;\n" +
+      "\013ListServers\022\r.server.Empty\032\033.server.Lis" +
+      "tServersResponse\"\000B\036Z\034eu.suro/launch/pro" +
+      "tos/serverb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -5023,7 +5095,7 @@ public final class ServerOuterClass {
     internal_static_server_CreateServerRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_server_CreateServerRequest_descriptor,
-        new java.lang.String[] { "Name", "Port", "Version", "SaveWorld", });
+        new java.lang.String[] { "Name", "Version", "SaveWorld", "Open", });
     internal_static_server_Empty_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_server_Empty_fieldAccessorTable = new
@@ -5059,7 +5131,7 @@ public final class ServerOuterClass {
     internal_static_server_ServerInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_server_ServerInfo_descriptor,
-        new java.lang.String[] { "Players", "Maxplayers", "Version", "OwnerName", "Status", "Port", });
+        new java.lang.String[] { "Players", "Maxplayers", "Version", "OwnerName", "Status", "Port", "Open", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

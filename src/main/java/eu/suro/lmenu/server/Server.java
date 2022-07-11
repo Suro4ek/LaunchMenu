@@ -14,12 +14,23 @@ public class Server {
     }
 
 
-    public void CreateServer(){
-
+    public void CreateServer(String name, boolean open, boolean save_world, String version){
+        ServerOuterClass.CreateServerRequest request = ServerOuterClass.CreateServerRequest
+                        .newBuilder()
+                                .setName(name)
+                                .setOpen(open)
+                                .setSaveWorld(save_world)
+                                .setVersion(version)
+                .buildPartial();
+        this.stub.createServer(request, new ServerCallBack());
     }
 
-    public void DeleteServer(){
-
+    public void DeleteServer(int port){
+        ServerOuterClass.DeleteServerRequest request = ServerOuterClass.DeleteServerRequest
+                .newBuilder()
+                .setPort(port)
+                .buildPartial();
+        this.stub.deleteServer(request, new ServerCallBack());
     }
 
     public void ListServers(){
@@ -27,11 +38,29 @@ public class Server {
                 new ListServers());
     }
 
+    class ServerCallBack implements  StreamObserver<ServerOuterClass.Response>{
+
+        @Override
+        public void onNext(ServerOuterClass.Response value) {
+
+        }
+
+        @Override
+        public void onError(Throwable t) {
+
+        }
+
+        @Override
+        public void onCompleted() {
+
+        }
+    }
+
     class ListServers implements StreamObserver<ServerOuterClass.ListServersResponse> {
 
         @Override
         public void onNext(ServerOuterClass.ListServersResponse value) {
-            LaunchMenu.servers = value.getServersList();
+            LaunchMenu.getInstance().setServers(value.getServersList());
         }
 
         @Override

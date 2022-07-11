@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package user;
+option go_package = "eu.suro/launch/protos/user";
+
+service User{
+    rpc CreateUser(CreateUserRequest) returns (Response) {}
+    rpc GetUser(GetUserRequest) returns (GetUserResponse) {}
+    rpc AddFriend(AddFriendRequest) returns (Response) {}
+    rpc RemoveFriend(RemoveFriendRequest) returns (Response) {}
+}
+
+message AddFriendRequest{
+    string name = 1;
+    string friend_name = 2;
+}
+
+message RemoveFriendRequest{
+    string name = 1;
+    string friend_name = 2;
+}
+
+message GetUserRequest{
+    string name = 1;
+}
+
+message UserM{
+    string name = 1;
+    repeated int32 plugins = 2;
+    repeated UserM friends = 3;
+}
+
+message GetUserResponse{
+    UserM user = 1;
+}
+
+
+message CreateUserRequest{
+    string name = 1;
+    repeated int32 plugins = 2;
+}
+
+message Empty{
+
+}
+
+message Response{
+    string status = 1;
+}
+

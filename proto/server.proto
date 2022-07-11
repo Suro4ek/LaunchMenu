@@ -12,9 +12,9 @@ service Server{
 
 message CreateServerRequest{
     string name = 1;
-    int32  port = 2;
-    string version = 3;
-    bool save_world = 4;
+    string version = 2;
+    bool save_world = 3;
+    bool open = 4;
 }
 
 message Empty{
@@ -45,4 +45,5 @@ message ServerInfo{
     string owner_name = 4;
     string status = 5;
     string port = 6;
+    bool  open = 7;
 }
