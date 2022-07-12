@@ -7,12 +7,11 @@ import server.ServerOuterClass;
 
 public class Server {
 
-    private ServerGrpc.ServerStub stub;
+    private ServerGrpc.ServerBlockingStub stub;
 
-    public Server(ServerGrpc.ServerStub stub){
+    public Server(ServerGrpc.ServerBlockingStub stub){
         this.stub = stub;
     }
-
 
     public void CreateServer(String name, boolean open, boolean save_world, String version){
         ServerOuterClass.CreateServerRequest request = ServerOuterClass.CreateServerRequest
@@ -22,7 +21,7 @@ public class Server {
                                 .setSaveWorld(save_world)
                                 .setVersion(version)
                 .buildPartial();
-        this.stub.createServer(request, new ServerCallBack());
+       ServerOuterClass.Response response = this.stub.createServer(request);
     }
 
     public void DeleteServer(int port){
@@ -30,48 +29,48 @@ public class Server {
                 .newBuilder()
                 .setPort(port)
                 .buildPartial();
-        this.stub.deleteServer(request, new ServerCallBack());
+        ServerOuterClass.Response response = this.stub.deleteServer(request);
     }
 
     public void ListServers(){
-        stub.listServers(ServerOuterClass.Empty.newBuilder().buildPartial(),
-                new ListServers());
+       ServerOuterClass.ListServersResponse response = stub.listServers(ServerOuterClass.Empty.newBuilder().buildPartial());
+       LaunchMenu.getInstance().setServers(response.getServersList());
     }
 
-    class ServerCallBack implements  StreamObserver<ServerOuterClass.Response>{
+//    class ServerCallBack implements  StreamObserver<ServerOuterClass.Response>{
+//
+//        @Override
+//        public void onNext(ServerOuterClass.Response value) {
+//
+//        }
+//
+//        @Override
+//        public void onError(Throwable t) {
+//
+//        }
+//
+//        @Override
+//        public void onCompleted() {
+//
+//        }
+//    }
 
-        @Override
-        public void onNext(ServerOuterClass.Response value) {
-
-        }
-
-        @Override
-        public void onError(Throwable t) {
-
-        }
-
-        @Override
-        public void onCompleted() {
-
-        }
-    }
-
-    class ListServers implements StreamObserver<ServerOuterClass.ListServersResponse> {
-
-        @Override
-        public void onNext(ServerOuterClass.ListServersResponse value) {
-            LaunchMenu.getInstance().setServers(value.getServersList());
-        }
-
-        @Override
-        public void onError(Throwable t) {
-
-        }
-
-        @Override
-        public void onCompleted() {
-
-        }
-    }
+//    class ListServers implements StreamObserver<ServerOuterClass.ListServersResponse> {
+//
+//        @Override
+//        public void onNext(ServerOuterClass.ListServersResponse value) {
+//            LaunchMenu.getInstance().setServers(value.getServersList());
+//        }
+//
+//        @Override
+//        public void onError(Throwable t) {
+//
+//        }
+//
+//        @Override
+//        public void onCompleted() {
+//
+//        }
+//    }
 
 }

@@ -8,6 +8,11 @@ service User{
     rpc GetUser(GetUserRequest) returns (GetUserResponse) {}
     rpc AddFriend(AddFriendRequest) returns (Response) {}
     rpc RemoveFriend(RemoveFriendRequest) returns (Response) {}
+    rpc DeleteWorld(RemoveWorldRequest) returns (Response) {}
+}
+
+message RemoveWorldRequest {
+    string name = 1;
 }
 
 message AddFriendRequest{

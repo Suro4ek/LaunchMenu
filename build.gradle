@@ -32,6 +32,7 @@ repositories {
         name = 'skullcreator-repo'
         url = 'https://github.com/deanveloper/SkullCreator/raw/mvn-repo/'
     }
+    maven { url "https://repo.panda-lang.org/releases" }
 }
 
 protobuf {
@@ -70,6 +71,8 @@ dependencies {
     implementation "io.grpc:grpc-stub:${grpcVersion}"
     implementation 'com.google.protobuf:protobuf-java:3.21.2'
     compileOnly 'dev.dbassett:skullcreator:3.0.1'
+    implementation 'dev.rollczi.litecommands:core:2.3.4'
+    implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
 }
 
 def targetJavaVersion = 8

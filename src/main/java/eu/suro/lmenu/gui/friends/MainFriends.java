@@ -28,6 +28,7 @@ public class MainFriends extends PaginatedView<UserOuterClass.UserM> {
             final UserOuterClass.UserM user = context.get("user");
             return user.getFriendsList();
         });
+
         setNextPageItem((context, item) -> item.withItem(new ItemStack(Material.ARROW)));
         setPreviousPageItem((context, item) -> item.withItem(new ItemStack(Material.ARROW)));
     }
