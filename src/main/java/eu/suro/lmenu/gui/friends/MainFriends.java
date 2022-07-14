@@ -13,15 +13,14 @@ import user.UserOuterClass;
 public class MainFriends extends PaginatedView<UserOuterClass.UserM> {
 
     public MainFriends(){
-        super(6, "Друзья");
+        super(5, "Друзья");
 
         setLayout(
                 "XXXXXXXXX",
                 "XOOOOOOOX",
                 "XOOOOOOOX",
                 "XOOOOOOOX",
-                "XXX<X>XXX",
-                "XXXXXXXXX"
+                "XXX<X>XXX"
         );
 
         setSource((context) -> {

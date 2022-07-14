@@ -7,6 +7,7 @@ import eu.suro.lmenu.commands.Command;
 import eu.suro.lmenu.config.Config;
 import eu.suro.lmenu.gui.MainMenu;
 import eu.suro.lmenu.gui.friends.MainFriends;
+import eu.suro.lmenu.gui.server.CreateServer;
 import eu.suro.lmenu.gui.settings.ServerSettings;
 import eu.suro.lmenu.server.Server;
 import eu.suro.lmenu.server.User;
@@ -34,6 +35,8 @@ public final class LaunchMenu extends JavaPlugin {
     private ManagedChannel channel;
     private ViewFrame view;
     private List<ServerOuterClass.ServerInfo> servers = new ArrayList<>();
+    private List<ServerOuterClass.Plugin> plugins = new ArrayList<>();
+    private List<ServerOuterClass.Version> versions = new ArrayList<>();
     //cache users
     public LoadingCache<String, Optional<UserOuterClass.UserM>> users = CacheBuilder
             .newBuilder()
@@ -57,7 +60,9 @@ public final class LaunchMenu extends JavaPlugin {
         //register bungee message out
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         //create menus
-        view.with(new MainMenu(), new ServerSettings(), new MainFriends());
+        view = new ViewFrame(this);
+        view.addView(new MainMenu(), new ServerSettings(), new MainFriends(), new CreateServer());
+        view.register();
         //register commands
         new Command();
     }
@@ -104,6 +109,14 @@ public final class LaunchMenu extends JavaPlugin {
 
     public User getUser() {
         return user;
+    }
+
+    public List<ServerOuterClass.Plugin> getPlugins() {
+        return plugins;
+    }
+
+    public List<ServerOuterClass.Version> getVersions() {
+        return versions;
     }
 
     public LoadingCache<String, Optional<UserOuterClass.UserM>> getUsers() {

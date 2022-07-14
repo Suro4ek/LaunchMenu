@@ -12,6 +12,7 @@ buildscript {
 plugins {
     id 'java'
     id "com.google.protobuf" version "${protobufPluginVersion}"
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 group = 'eu.suro.lmenu'
@@ -34,6 +35,8 @@ repositories {
     }
     maven { url "https://repo.panda-lang.org/releases" }
 }
+
+
 
 protobuf {
     protoc {
@@ -72,7 +75,13 @@ dependencies {
     implementation 'com.google.protobuf:protobuf-java:3.21.2'
     compileOnly 'dev.dbassett:skullcreator:3.0.1'
     implementation 'dev.rollczi.litecommands:core:2.3.4'
+    implementation 'dev.rollczi.litecommands:bukkit:2.3.4'
     implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
+}
+
+jar{
+    enabled = true
+
 }
 
 def targetJavaVersion = 8

@@ -8,6 +8,8 @@ service Server{
     rpc UpdateServer(UpdateServerRequest) returns (Response) {}
     rpc DeleteServer(DeleteServerRequest) returns (Response) {}
     rpc ListServers(Empty) returns (ListServersResponse) {}
+    rpc GetPlugins(Empty) returns (Plugins) {}
+    rpc GetVersions(Empty) returns (Versions) {}
 }
 
 message CreateServerRequest{
@@ -15,6 +17,30 @@ message CreateServerRequest{
     string version = 2;
     bool save_world = 3;
     bool open = 4;
+}
+
+message Version{
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    string url = 4;
+    string version = 5;
+    string java_version = 6;
+}
+
+message Versions{
+    repeated Version versions = 1;
+}
+
+message Plugins {
+    repeated Plugin plugins = 1;
+}
+
+message Plugin{
+    int32 id = 1;
+    string name = 2;
+    string spigotid = 3;
+    string description = 4;
 }
 
 message Empty{

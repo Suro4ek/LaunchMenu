@@ -1,6 +1,14 @@
 servers: #array ports
-  25565: mg-1 #port - servername in bungeecord
-  25568: mg-2
+  8881: L-1 #port - servername in bungeecord
+  8882: L-2
+  8883: L-3
+  8884: L-4
+  8885: L-5
+  8886: L-6
+  8887: L-7
+  8888: L-8
+  8889: L-9
+  8890: L-10
 grpc:
-  host: 0.0.0.0
+  host: 192.168.88.62
   port: 9000

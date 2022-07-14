@@ -21,15 +21,14 @@ import java.util.stream.Collectors;
 
 public class MainMenu extends PaginatedView<ServerOuterClass.ServerInfo> {
     public MainMenu() {
-        super(6, "Главное меню - Launch+");
+        super(5, "Главное меню - Launch+");
 
         setLayout(
                 "XXXXXXXXX",
                 "XOOOOOOOX",
                 "XOOOOOOOX",
                 "XOOOOOOOX",
-                "XXX<X>XXX",
-                "XXXXXXXXX"
+                "XXX<X>XXX"
         );
         setSource((context) -> {
           final UserOuterClass.UserM user = context.get("user");
