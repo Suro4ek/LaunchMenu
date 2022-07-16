@@ -3,4 +3,4 @@ version: '${version}'
 main: eu.suro.lmenu.LaunchMenu
 api-version: 1.15
 authors: [ Suro ]
-description: This is plugin client for grpc server, plugin is create server and check save world or no
+description: This is plugin client for grpc server, plugin is create server and check save world or not.

@@ -6,8 +6,8 @@ option go_package = "eu.suro/launch/protos/user";
 service User{
     rpc CreateUser(CreateUserRequest) returns (Response) {}
     rpc GetUser(GetUserRequest) returns (GetUserResponse) {}
-    rpc AddFriend(AddFriendRequest) returns (Response) {}
-    rpc RemoveFriend(RemoveFriendRequest) returns (Response) {}
+    //  rpc AddFriend(AddFriendRequest) returns (Response) {}
+    //  rpc RemoveFriend(RemoveFriendRequest) returns (Response) {}
     rpc DeleteWorld(RemoveWorldRequest) returns (Response) {}
 }
 
@@ -15,15 +15,15 @@ message RemoveWorldRequest {
     string name = 1;
 }
 
-message AddFriendRequest{
-    string name = 1;
-    string friend_name = 2;
-}
-
-message RemoveFriendRequest{
-    string name = 1;
-    string friend_name = 2;
-}
+//message AddFriendRequest{
+//  string name = 1;
+//  string friend_name = 2;
+//}
+//
+//message RemoveFriendRequest{
+//    string name = 1;
+//    string friend_name = 2;
+//}
 
 message GetUserRequest{
     string name = 1;
@@ -32,7 +32,7 @@ message GetUserRequest{
 message UserM{
     string name = 1;
     repeated Plugin plugins = 2;
-    repeated UserM friends = 3;
+    //    repeated UserM friends = 3;
 }
 
 message Plugin{

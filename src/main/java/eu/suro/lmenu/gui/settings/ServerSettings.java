@@ -2,7 +2,7 @@ package eu.suro.lmenu.gui.settings;
 
 import eu.suro.lmenu.LaunchMenu;
 import eu.suro.lmenu.gui.MainMenu;
-import eu.suro.lmenu.gui.friends.MainFriends;
+//import eu.suro.lmenu.gui.friends.MainFriends;
 import me.saiintbrisson.minecraft.OpenViewContext;
 import me.saiintbrisson.minecraft.View;
 import org.bukkit.Material;
@@ -15,19 +15,16 @@ public class ServerSettings extends View {
 
     public ServerSettings(){
         super(1, "Настройка своего сервера");
+        setCancelOnClick(true);
         //todo user data
-        slot(2, new ItemStack(Material.ARROW)).onClick((e) -> {e.open(ServerSettings.class,
-                new HashMap<String,Object>(){{
-                    put("user",LaunchMenu.getInstance().getUsers().getIfPresent(e.getPlayer().getName()));
-                }});});
 //        //Stop server, check port
 //        slot(3, new ItemStack(Material.RED_WOOL)).onClick((e) -> {
 //            LaunchMenu.getInstance().server.DeleteServer();
 //        });
-        slot(4, new ItemStack(Material.PLAYER_HEAD)).onClick((e) -> {e.open(MainFriends.class,
-                new HashMap<String,Object>(){{
-                    put("user",LaunchMenu.getInstance().getUsers().getIfPresent(e.getPlayer().getName()));
-        }});});
+//        slot(4, new ItemStack(Material.PLAYER_HEAD)).onClick((e) -> {e.open(MainFriends.class,
+//                new HashMap<String,Object>(){{
+//                    put("user",LaunchMenu.getInstance().getUsers().getIfPresent(e.getPlayer().getName()));
+//        }});});
     }
 
     @Override

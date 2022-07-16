@@ -14,8 +14,8 @@ public class Player implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e){
         final String username = e.getPlayer().getName().toLowerCase(Locale.ROOT);
-        Optional<UserOuterClass.UserM> userM = LaunchMenu.getInstance().getUsers().getIfPresent(username);
-        if(!userM.isPresent()){
+        UserOuterClass.UserM userM = LaunchMenu.getInstance().getUsers().getIfPresent(username);
+        if(userM == null){
             LaunchMenu.getInstance().getUser().CreateUser(username);
             LaunchMenu.getInstance().getUsers().refresh(username);
         }

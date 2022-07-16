@@ -6,13 +6,13 @@ import com.google.common.cache.LoadingCache;
 import eu.suro.lmenu.commands.Command;
 import eu.suro.lmenu.config.Config;
 import eu.suro.lmenu.gui.MainMenu;
-import eu.suro.lmenu.gui.friends.MainFriends;
 import eu.suro.lmenu.gui.server.CreateServer;
 import eu.suro.lmenu.gui.settings.ServerSettings;
+import eu.suro.lmenu.listener.Player;
 import eu.suro.lmenu.server.Server;
 import eu.suro.lmenu.server.User;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
+import io.grpc.*;
+import io.grpc.stub.StreamObserver;
 import me.saiintbrisson.minecraft.ViewFrame;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 public final class LaunchMenu extends JavaPlugin {
     static LaunchMenu instance;
@@ -37,16 +38,18 @@ public final class LaunchMenu extends JavaPlugin {
     private List<ServerOuterClass.ServerInfo> servers = new ArrayList<>();
     private List<ServerOuterClass.Plugin> plugins = new ArrayList<>();
     private List<ServerOuterClass.Version> versions = new ArrayList<>();
+
+//    private Logger logger;
     //cache users
-    public LoadingCache<String, Optional<UserOuterClass.UserM>> users = CacheBuilder
+    public LoadingCache<String, UserOuterClass.UserM> users = CacheBuilder
             .newBuilder()
             .maximumSize(100)
             .expireAfterWrite(10, TimeUnit.MINUTES)
             .build(
-                    new CacheLoader<String, Optional<UserOuterClass.UserM>>() {
+                    new CacheLoader<String, UserOuterClass.UserM>() {
                         @Override
-                        public Optional<UserOuterClass.UserM> load(String key) throws Exception {
-                            return Optional.ofNullable(user.getUser(key.toLowerCase(Locale.ROOT)));
+                        public UserOuterClass.UserM load(String key) throws Exception {
+                            return user.getUser(key.toLowerCase(Locale.ROOT));
                         }
                     }
             );
@@ -55,29 +58,33 @@ public final class LaunchMenu extends JavaPlugin {
         //init
         instance = this;
         Config config = new Config();
+//        logger = this.getServer().getLogger();
         //grpc
         createGrpcClient(config);
         //register bungee message out
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         //create menus
         view = new ViewFrame(this);
-        view.addView(new MainMenu(), new ServerSettings(), new MainFriends(), new CreateServer());
+        view.addView(new MainMenu(), new ServerSettings(), new CreateServer());
         view.register();
         //register commands
         new Command();
+        //register events
+        getServer().getPluginManager().registerEvents(new Player(), this);
     }
 
     public void createGrpcClient(Config config){
-        channel = ManagedChannelBuilder
-                .forAddress(config.getString("grpc.host"),config.getInt("grpc.port"))
-                .usePlaintext()
+        ChannelCredentials credentials = InsecureChannelCredentials.create();
+        channel = Grpc.newChannelBuilder("192.168.88.62:9000", credentials)
                 .build();
-        //Maybe future???
-        UserGrpc.UserBlockingStub userStub = UserGrpc.newBlockingStub(channel);
-        ServerGrpc.ServerBlockingStub stub = ServerGrpc.newBlockingStub(channel);
-        Server server = new Server(stub);
-        this.server = server;
-        user = new User(userStub);
+        //Maybe stub and blocking stub
+            UserGrpc.UserStub userStub = UserGrpc.newStub(channel);
+            UserGrpc.UserBlockingStub userBlockingStub = UserGrpc.newBlockingStub(channel);
+            ServerGrpc.ServerStub stub = ServerGrpc.newStub(channel);
+            Server server = new Server(stub);
+            this.server = server;
+            server.ListVersions();
+            user = new User(userStub,userBlockingStub);
         //schedule for update list servers
         new BukkitRunnable() {
             @Override
@@ -86,7 +93,7 @@ public final class LaunchMenu extends JavaPlugin {
                     server.ListServers();
                 }
             }
-        }.runTaskTimerAsynchronously(this, 10L, 20*10);
+        }.runTaskTimerAsynchronously(this, 20l*10, 20*10);
     }
 
     @Override
@@ -103,6 +110,28 @@ public final class LaunchMenu extends JavaPlugin {
         return servers;
     }
 
+    public List<ServerOuterClass.Plugin> getPlugins() {
+        return plugins;
+    }
+
+//    @NotNull
+//    @Override
+//    public Logger getLogger() {
+//        return logger;
+//    }
+
+    public List<ServerOuterClass.Version> getVersions() {
+        return versions;
+    }
+
+    public void setPlugins(List<ServerOuterClass.Plugin> plugins) {
+        this.plugins = plugins;
+    }
+
+    public void setVersions(List<ServerOuterClass.Version> versions) {
+        this.versions = versions;
+    }
+
     public ViewFrame getView() {
         return view;
     }
@@ -111,15 +140,7 @@ public final class LaunchMenu extends JavaPlugin {
         return user;
     }
 
-    public List<ServerOuterClass.Plugin> getPlugins() {
-        return plugins;
-    }
-
-    public List<ServerOuterClass.Version> getVersions() {
-        return versions;
-    }
-
-    public LoadingCache<String, Optional<UserOuterClass.UserM>> getUsers() {
+    public LoadingCache<String, UserOuterClass.UserM> getUsers() {
         return users;
     }
 

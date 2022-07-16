@@ -1,11 +1,11 @@
 buildscript {
     ext {
         // https://mvnrepository.com/artifact/com.google.protobuf/protobuf-bom
-        protobufVersion = '3.21.2'
+        protobufVersion = '3.19.2'
         // https://mvnrepository.com/artifact/com.google.protobuf/protobuf-gradle-plugin
-        protobufPluginVersion = '0.8.19'
+        protobufPluginVersion = '0.8.18'
         // https://mvnrepository.com/artifact/io.grpc/grpc-bom
-        grpcVersion = '1.47.0'
+        grpcVersion = '1.47.0-SNAPSHOT'
     }
 }
 
@@ -13,12 +13,18 @@ plugins {
     id 'java'
     id "com.google.protobuf" version "${protobufPluginVersion}"
     id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'idea'
 }
 
 group = 'eu.suro.lmenu'
 version = '1.0-SNAPSHOT'
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 repositories {
+    maven { // The google mirror is less flaky than mavenCentral()
+        url "https://maven-central.storage-download.googleapis.com/maven2/" }
     mavenCentral()
     maven {
         name = 'papermc-repo'
@@ -29,10 +35,6 @@ repositories {
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
     maven { url 'https://jitpack.io' }
-    maven {
-        name = 'skullcreator-repo'
-        url = 'https://github.com/deanveloper/SkullCreator/raw/mvn-repo/'
-    }
     maven { url "https://repo.panda-lang.org/releases" }
 }
 
@@ -40,20 +42,16 @@ repositories {
 
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:${protobufVersion}"
+        artifact = "com.google.protobuf:protoc:3.19.2"
     }
     plugins {
         grpc {
-            artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
+            artifact = "io.grpc:protoc-gen-grpc-java:1.47.0"
         }
     }
     generatedFilesBaseDir = "$projectDir/src"
     generateProtoTasks {
-        all().each { task ->
-            task.plugins {
-                grpc {  }
-            }
-        }
+        all()*.plugins { grpc {} }
     }
 }
 
@@ -68,20 +66,19 @@ sourceSets {
 
 dependencies {
     compileOnly 'com.destroystokyo.paper:paper-api:1.15.2-R0.1-SNAPSHOT'
-    implementation 'com.github.DevNatan:inventory-framework:2.5.1-rc.1'
-    implementation "io.grpc:grpc-netty:${grpcVersion}"
-    implementation "io.grpc:grpc-protobuf:${grpcVersion}"
-    implementation "io.grpc:grpc-stub:${grpcVersion}"
-    implementation 'com.google.protobuf:protobuf-java:3.21.2'
-    compileOnly 'dev.dbassett:skullcreator:3.0.1'
+    implementation 'com.github.DevNatan:inventory-framework:2.5.1'
+    runtimeOnly 'io.grpc:grpc-netty-shaded:1.47.0'
+    implementation 'io.grpc:grpc-protobuf:1.47.0'
+    implementation 'io.grpc:grpc-stub:1.47.0'
+//    implementation "io.grpc:grpc-xds:1.47.0"
+    implementation "com.google.protobuf:protobuf-java-util:3.19.2"
     implementation 'dev.rollczi.litecommands:core:2.3.4'
     implementation 'dev.rollczi.litecommands:bukkit:2.3.4'
     implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
 }
 
-jar{
-    enabled = true
-
+shadowJar {
+    mergeServiceFiles()
 }
 
 def targetJavaVersion = 8

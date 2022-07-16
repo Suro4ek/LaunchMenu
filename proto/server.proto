@@ -14,13 +14,13 @@ service Server{
 
 message CreateServerRequest{
     string name = 1;
-    string version = 2;
+    int32 version = 2;
     bool save_world = 3;
     bool open = 4;
 }
 
 message Version{
-    string id = 1;
+    uint32 id = 1;
     string name = 2;
     string description = 3;
     string url = 4;
@@ -37,7 +37,7 @@ message Plugins {
 }
 
 message Plugin{
-    int32 id = 1;
+    uint32 id = 1;
     string name = 2;
     string spigotid = 3;
     string description = 4;
