@@ -12,3 +12,17 @@ servers: #array ports
 grpc:
   host: 192.168.88.62
   port: 9000
+main:
+  title: "Главное меню - Launch+"
+  nextPage: "Далее"
+  prevPage: "Назад"
+  server:
+    title: "Сервер {name}"
+    lore:
+      - "Порт: {port}"
+      - "Версия: {version}"
+      - "Статус: {status}"
+      - "Количество игроков: {players}/{maxPlayers}"
+settings:
+  title: "Настройка своего сервера"
+  stopServer: "Остановить сервер"

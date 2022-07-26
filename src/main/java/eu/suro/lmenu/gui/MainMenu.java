@@ -7,6 +7,7 @@ import eu.suro.lmenu.gui.server.CreateServer;
 import me.saiintbrisson.minecraft.*;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -20,8 +21,10 @@ import java.util.stream.Collectors;
 
 public class MainMenu extends PaginatedView<ServerOuterClass.ServerInfo> {
 
-    public MainMenu() {
-        super(5, "Главное меню - Launch+");
+    private FileConfiguration config;
+    public MainMenu(FileConfiguration config) {
+        super(5, config.getString("main.title"));
+        this.config = config;
         setCancelOnClick(true);
         setLayout(
                 "XXXXXXXXX",
@@ -59,8 +62,16 @@ public class MainMenu extends PaginatedView<ServerOuterClass.ServerInfo> {
         });
         //TODO as 2.5.2 version framework releaed, need to fix this
 //        scheduleUpdate(20L * 5);
-        setNextPageItem((context, item) -> item.withItem(new ItemStack(Material.ARROW)));
-        setPreviousPageItem((context, item) -> item.withItem(new ItemStack(Material.ARROW)));
+        ItemStack nextPageItem = new ItemStack(Material.ARROW);
+        ItemMeta nextPageItemMeta = nextPageItem.getItemMeta();
+        nextPageItemMeta.setDisplayName(config.getString("main.nextPage"));
+        nextPageItem.setItemMeta(nextPageItemMeta);
+        setNextPageItem((context, item) -> item.withItem(nextPageItem));
+        ItemStack previousPageItem = new ItemStack(Material.ARROW);
+        ItemMeta previousPageItemMeta = previousPageItem.getItemMeta();
+        previousPageItemMeta.setDisplayName(config.getString("main.prevPage"));
+        previousPageItem.setItemMeta(previousPageItemMeta);
+        setPreviousPageItem((context, item) -> item.withItem(previousPageItem));
     }
     //TODO as 2.5.2 version framework releaed, need to fix this
 //    @Override
@@ -94,16 +105,14 @@ public class MainMenu extends PaginatedView<ServerOuterClass.ServerInfo> {
         ItemStack serverItem = new ItemStack(Material.WHITE_WOOL);
         ItemMeta serverItemMeta = serverItem.getItemMeta();
         //todo text to config
-        serverItemMeta.setDisplayName("§cСервер игрока "+value.getOwnerName());
+        serverItemMeta.setDisplayName(config.getString("main.server.title").replace("{name}",value.getOwnerName()));
         //todo add lore text
         List<String> lore = new ArrayList<>();
-        lore.add("§7Владелец: "+value.getOwnerName());
-        lore.add("§7Порт: "+value.getPort());
-        lore.add("§7Открыт: "+value.getOpen());
-        lore.add("§7Игроков: "+value.getPlayers());
-        lore.add("§7Максимальное количество игроков: "+value.getMaxplayers());
-        lore.add("§7Версия: "+value.getVersion());
-        lore.add("§7Статус: "+value.getStatus());
+        lore = config.getStringList("main.server.lore").stream().map(s ->
+                s.replace("{name}",value.getOwnerName())
+                .replace("{version}", value.getVersion())
+                .replace("{players}", value.getPlayers()+"")
+                .replace("{maxPlayers}", value.getMaxplayers()+"")).collect(Collectors.toList());
         serverItemMeta.setLore(lore);
 //        if(user.getFriendsList() != null && user.getFriendsList().stream().filter(friend -> friend.getName() == value.getOwnerName()).collect(Collectors.toList()).size()>0)
 //        {
@@ -134,7 +143,6 @@ public class MainMenu extends PaginatedView<ServerOuterClass.ServerInfo> {
 
         output.writeUTF("Connect");
         output.writeUTF(server);
-        target.sendMessage("§aПереход на сервер §c"+server);
         target.sendPluginMessage(LaunchMenu.getInstance(), "BungeeCord", output.toByteArray());
     }
 }

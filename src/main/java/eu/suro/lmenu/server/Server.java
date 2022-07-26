@@ -35,6 +35,11 @@ public class Server {
             @Override
             public void onError(Throwable t) {
                 LaunchMenu.getInstance().getLogger().info(t.getMessage());
+                if(t.getMessage().equals("no free ports")){
+                    if(player != null){
+                        player.sendMessage("§cНет свободных портов");
+                    }
+                }
                 if(player != null){
                     player.sendMessage("§cНе удалось создать сервер");
                 }

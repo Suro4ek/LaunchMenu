@@ -39,7 +39,6 @@ public final class LaunchMenu extends JavaPlugin {
     private List<ServerOuterClass.Plugin> plugins = new ArrayList<>();
     private List<ServerOuterClass.Version> versions = new ArrayList<>();
 
-//    private Logger logger;
     //cache users
     public LoadingCache<String, UserOuterClass.UserM> users = CacheBuilder
             .newBuilder()
@@ -58,14 +57,15 @@ public final class LaunchMenu extends JavaPlugin {
         //init
         instance = this;
         Config config = new Config();
-//        logger = this.getServer().getLogger();
         //grpc
         createGrpcClient(config);
         //register bungee message out
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         //create menus
         view = new ViewFrame(this);
-        view.addView(new MainMenu(), new ServerSettings(), new CreateServer());
+        view.addView(new MainMenu(config.getConfig()),
+                new ServerSettings(config.getConfig()),
+                new CreateServer());
         view.register();
         //register commands
         new Command();
@@ -75,7 +75,8 @@ public final class LaunchMenu extends JavaPlugin {
 
     public void createGrpcClient(Config config){
         ChannelCredentials credentials = InsecureChannelCredentials.create();
-        channel = Grpc.newChannelBuilder("192.168.88.62:9000", credentials)
+        channel = Grpc.newChannelBuilder(config.getString("grpc.host")+":"+config.getString("grpc.host"),
+                        credentials)
                 .build();
         //Maybe stub and blocking stub
             UserGrpc.UserStub userStub = UserGrpc.newStub(channel);
@@ -113,12 +114,6 @@ public final class LaunchMenu extends JavaPlugin {
     public List<ServerOuterClass.Plugin> getPlugins() {
         return plugins;
     }
-
-//    @NotNull
-//    @Override
-//    public Logger getLogger() {
-//        return logger;
-//    }
 
     public List<ServerOuterClass.Version> getVersions() {
         return versions;

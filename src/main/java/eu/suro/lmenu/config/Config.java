@@ -26,4 +26,8 @@ public class Config  {
     public int getInt(String key){
         return config.getInt(key);
     }
+
+    public FileConfiguration getConfig() {
+        return config;
+    }
 }

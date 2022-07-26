@@ -29,8 +29,12 @@ public class CreateServer extends View {
             versionMeta.setLore(Arrays.asList(version.getDescription().split("\n")));
             versionItem.setItemMeta(versionMeta);
             slot(2, versionItem).onClick((e) -> {
+                boolean save_world = false;
+                if(e.getPlayer().hasPermission("launch.save")){
+                    save_world = true;
+                }
                 LaunchMenu.getInstance().server.CreateServer(e.getPlayer(),e.getPlayer().getName().toLowerCase(Locale.ROOT),
-                        true, false, version.getId());
+                        true, save_world, version.getId());
                 e.getPlayer().sendMessage("§aИдет создание сервера подождите минуту");
             }).closeOnClick();
         });
