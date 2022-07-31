@@ -30,6 +30,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public final class LaunchMenu extends JavaPlugin {
+
+    public static final String PERMISSION_SAVE = "launch.save";
     static LaunchMenu instance;
     public Server server;
     private User user;
@@ -65,7 +67,7 @@ public final class LaunchMenu extends JavaPlugin {
         view = new ViewFrame(this);
         view.addView(new MainMenu(config.getConfig()),
                 new ServerSettings(config.getConfig()),
-                new CreateServer());
+                new CreateServer(config.getConfig()));
         view.register();
         //register commands
         new Command();
@@ -78,14 +80,13 @@ public final class LaunchMenu extends JavaPlugin {
         channel = Grpc.newChannelBuilder(config.getString("grpc.host")+":"+config.getString("grpc.host"),
                         credentials)
                 .build();
-        //Maybe stub and blocking stub
             UserGrpc.UserStub userStub = UserGrpc.newStub(channel);
             UserGrpc.UserBlockingStub userBlockingStub = UserGrpc.newBlockingStub(channel);
             ServerGrpc.ServerStub stub = ServerGrpc.newStub(channel);
-            Server server = new Server(stub);
+            Server server = new Server(stub, config.getConfig());
             this.server = server;
             server.ListVersions();
-            user = new User(userStub,userBlockingStub);
+            user = new User(userStub, userBlockingStub, config.getConfig());
         //schedule for update list servers
         new BukkitRunnable() {
             @Override
@@ -94,7 +95,7 @@ public final class LaunchMenu extends JavaPlugin {
                     server.ListServers();
                 }
             }
-        }.runTaskTimerAsynchronously(this, 20l*10, 20*10);
+        }.runTaskTimerAsynchronously(this, 20L*10, 20L*10);
     }
 
     @Override

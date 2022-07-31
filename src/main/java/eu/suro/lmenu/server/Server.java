@@ -2,6 +2,7 @@ package eu.suro.lmenu.server;
 
 import eu.suro.lmenu.LaunchMenu;
 import io.grpc.stub.StreamObserver;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import server.ServerGrpc;
 import server.ServerOuterClass;
@@ -9,10 +10,11 @@ import server.ServerOuterClass;
 public class Server {
 
     private ServerGrpc.ServerStub stub;
+    private FileConfiguration config;
 
-    public Server(ServerGrpc.ServerStub stub){
+    public Server(ServerGrpc.ServerStub stub, FileConfiguration config){
         this.stub = stub;
-
+        this.config = config;
     }
 
     public void CreateServer(Player player, String name, boolean open, boolean save_world, int version){
@@ -27,7 +29,7 @@ public class Server {
             @Override
             public void onNext(ServerOuterClass.Response value) {
                 if(player != null){
-                    player.sendMessage("§aСервер запускается...");
+                    player.sendMessage(config.getString("messages.server_created"));
                 }
                 LaunchMenu.getInstance().getLogger().info("Server created");
             }
@@ -37,13 +39,13 @@ public class Server {
                 LaunchMenu.getInstance().getLogger().info(t.getMessage());
                 if(t.getMessage().equals("no free ports")){
                     if(player != null){
-                        player.sendMessage("§cНет свободных портов");
+                        player.sendMessage(config.getString("messages.not_free_port"));
                     }
+                    return;
                 }
                 if(player != null){
-                    player.sendMessage("§cНе удалось создать сервер");
+                    player.sendMessage(config.getString("messages.server_not_created"));
                 }
-                LaunchMenu.getInstance().getLogger().info("Server not created");
             }
 
             @Override
@@ -83,7 +85,6 @@ public class Server {
             @Override
             public void onNext(ServerOuterClass.ListServersResponse value) {
                 LaunchMenu.getInstance().setServers(value.getServersList());
-                LaunchMenu.getInstance().getLogger().info("Servers: " + value.getServersList().size());
             }
 
             @Override
@@ -93,7 +94,7 @@ public class Server {
 
             @Override
             public void onCompleted() {
-                LaunchMenu.getInstance().getLogger().info("Servers received");
+
             }
         });
     }
@@ -137,40 +138,5 @@ public class Server {
             }
         });
     }
-//    class ServerCallBack implements  StreamObserver<ServerOuterClass.Response>{
-//
-//        @Override
-//        public void onNext(ServerOuterClass.Response value) {
-//
-//        }
-//
-//        @Override
-//        public void onError(Throwable t) {
-//
-//        }
-//
-//        @Override
-//        public void onCompleted() {
-//
-//        }
-//    }
-
-//    class ListServers implements StreamObserver<ServerOuterClass.ListServersResponse> {
-//
-//        @Override
-//        public void onNext(ServerOuterClass.ListServersResponse value) {
-//            LaunchMenu.getInstance().setServers(value.getServersList());
-//        }
-//
-//        @Override
-//        public void onError(Throwable t) {
-//
-//        }
-//
-//        @Override
-//        public void onCompleted() {
-//
-//        }
-//    }
 
 }

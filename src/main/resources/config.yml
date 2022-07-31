@@ -1,3 +1,5 @@
+#launch.save - право на сохранение мира
+
 servers: #array ports
   8881: L-1 #port - servername in bungeecord
   8882: L-2
@@ -23,6 +25,27 @@ main:
       - "Версия: {version}"
       - "Статус: {status}"
       - "Количество игроков: {players}/{maxPlayers}"
+create:
+  title: "Создание сервера"
 settings:
   title: "Настройка своего сервера"
-  stopServer: "Остановить сервер"
+  stopServer:
+    name: "Остановить сервер"
+    lore:
+      - "Остановить сервер"
+  deleteWorld:
+    name:  "Удалить мир"
+    lore:
+      - "Delete world"
+server:
+  create:
+    success: "§aИдет создание сервера подождите минуту"
+messages:
+  world_removed: "§aМир удален"
+  server_stopped: "§aСервер остановлен"
+  server_created: "§aСервер запускается..."
+  not_free_port: "§cНет свободных портов"
+  server_not_created: "§cСервер не создан"
+  help:
+    - "/launch menu - открыть главное меню"
+    - "/launch settings - открыть меню сервера"

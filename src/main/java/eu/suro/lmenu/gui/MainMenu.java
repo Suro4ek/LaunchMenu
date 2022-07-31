@@ -60,7 +60,7 @@ public class MainMenu extends PaginatedView<ServerOuterClass.ServerInfo> {
             }).collect(Collectors.toList());
             return serverInfos;
         });
-        //TODO as 2.5.2 version framework releaed, need to fix this
+        //TODO as 2.5.3 version framework releaed, need to fix this
 //        scheduleUpdate(20L * 5);
         ItemStack nextPageItem = new ItemStack(Material.ARROW);
         ItemMeta nextPageItemMeta = nextPageItem.getItemMeta();
@@ -104,9 +104,7 @@ public class MainMenu extends PaginatedView<ServerOuterClass.ServerInfo> {
         final UserOuterClass.UserM user = context.get("user");
         ItemStack serverItem = new ItemStack(Material.WHITE_WOOL);
         ItemMeta serverItemMeta = serverItem.getItemMeta();
-        //todo text to config
         serverItemMeta.setDisplayName(config.getString("main.server.title").replace("{name}",value.getOwnerName()));
-        //todo add lore text
         List<String> lore = new ArrayList<>();
         lore = config.getStringList("main.server.lore").stream().map(s ->
                 s.replace("{name}",value.getOwnerName())
@@ -138,9 +136,8 @@ public class MainMenu extends PaginatedView<ServerOuterClass.ServerInfo> {
         });
     }
 
-    public void sendToServer(Player target, String server) {
+    public void sendToServer(@NotNull Player target, String server) {
         ByteArrayDataOutput output = ByteStreams.newDataOutput();
-
         output.writeUTF("Connect");
         output.writeUTF(server);
         target.sendPluginMessage(LaunchMenu.getInstance(), "BungeeCord", output.toByteArray());

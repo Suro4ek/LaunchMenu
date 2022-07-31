@@ -9,6 +9,11 @@ service User{
     //  rpc AddFriend(AddFriendRequest) returns (Response) {}
     //  rpc RemoveFriend(RemoveFriendRequest) returns (Response) {}
     rpc DeleteWorld(RemoveWorldRequest) returns (Response) {}
+    rpc StopServer(StopServerRequest) returns (Response) {}
+}
+
+message StopServerRequest {
+    string username = 1;
 }
 
 message RemoveWorldRequest {
@@ -49,7 +54,8 @@ message GetUserResponse{
 
 message CreateUserRequest{
     string name = 1;
-    repeated int32 plugins = 2;
+    string real_name = 2;
+    repeated int32 plugins = 3;
 }
 
 message Empty{
@@ -60,3 +66,5 @@ message Response{
     string status = 1;
 }
 
+//generate proto command
+//protoc --go_out=. ./proto/user.proto

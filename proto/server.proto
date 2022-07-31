@@ -10,6 +10,7 @@ service Server{
     rpc ListServers(Empty) returns (ListServersResponse) {}
     rpc GetPlugins(Empty) returns (Plugins) {}
     rpc GetVersions(Empty) returns (Versions) {}
+    rpc DeleteAllServers(Empty) returns(Empty) {}
 }
 
 message CreateServerRequest{

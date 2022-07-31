@@ -21,12 +21,13 @@ public class LaunchCommand {
 
     @Execute(required = 0)
     public void CommandsList(Player sender){
-        sender.sendMessage("Помощь по командам");
+        for(String s : LaunchMenu.getInstance().getConfig().getStringList("messages.help")){
+            sender.sendMessage(s);
+        }
     }
 
     @Execute(route = "menu")
     public void OpenMenu(Player sender){
-        sender.sendMessage("Открываем меню");
         LaunchMenu.getInstance().getView().open(MainMenu.class, sender,
                 new HashMap<String,Object>(){{
             put("user",LaunchMenu.getInstance().getUsers().getIfPresent(sender.getName()));
