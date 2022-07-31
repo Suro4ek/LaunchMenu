@@ -1,5 +1,6 @@
 package eu.suro.lmenu;
 
+import com.destroystokyo.paper.Title;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -14,6 +15,7 @@ import eu.suro.lmenu.server.User;
 import io.grpc.*;
 import io.grpc.stub.StreamObserver;
 import me.saiintbrisson.minecraft.ViewFrame;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -77,7 +79,7 @@ public final class LaunchMenu extends JavaPlugin {
 
     public void createGrpcClient(Config config){
         ChannelCredentials credentials = InsecureChannelCredentials.create();
-        channel = Grpc.newChannelBuilder(config.getString("grpc.host")+":"+config.getString("grpc.host"),
+        channel = Grpc.newChannelBuilder(config.getString("grpc.host")+":"+config.getString("grpc.port"),
                         credentials)
                 .build();
             UserGrpc.UserStub userStub = UserGrpc.newStub(channel);
@@ -93,6 +95,13 @@ public final class LaunchMenu extends JavaPlugin {
             public void run() {
                 if(getInstance().isEnabled()){
                     server.ListServers();
+                    getServers().forEach(serverInfo -> {
+                        Bukkit.getOnlinePlayers().forEach(player -> {
+                            if(serverInfo.getVersion() != "" && serverInfo.getOwnerName().toLowerCase(Locale.ROOT).equals(player.getName().toLowerCase(Locale.ROOT))){
+                                player.sendTitle(new Title("У вас запустился сервре"));
+                            }
+                        });
+                    });
                 }
             }
         }.runTaskTimerAsynchronously(this, 20L*10, 20L*10);

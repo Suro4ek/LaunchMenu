@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class CreateServer extends PaginatedView<ServerOuterClass.Version> {
     private FileConfiguration config;
     public CreateServer(FileConfiguration config){
-        super(1, config.getString("create.title"));
+        super(5, config.getString("create.title"));
         this.config = config;
         setCancelOnClick(true);
         setLayout(
@@ -48,7 +48,7 @@ public class CreateServer extends PaginatedView<ServerOuterClass.Version> {
         versionMeta.setDisplayName(value.getName());
         versionMeta.setLore(Arrays.asList(value.getDescription().split("\n")));
         versionItem.setItemMeta(versionMeta);
-        slot(2, versionItem).onClick((e) -> {
+        viewItem.withItem(versionItem).onClick((e) -> {
             boolean save_world = false;
             if(e.getPlayer().hasPermission(LaunchMenu.PERMISSION_SAVE)){
                 save_world = true;
