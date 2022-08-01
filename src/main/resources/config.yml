@@ -21,10 +21,16 @@ main:
   server:
     title: "Сервер {name}"
     lore:
-      - "Порт: {port}"
       - "Версия: {version}"
-      - "Статус: {status}"
       - "Количество игроков: {players}/{maxPlayers}"
+  book:
+    title: "Помощь"
+    lore:
+      - "Что то "
+  create-server:
+    title: "Создать сервер"
+    lore:
+      - "Нажми чтобы создать сервер"
 create:
   title: "Создание сервера"
 settings:
@@ -33,10 +39,14 @@ settings:
     name: "Остановить сервер"
     lore:
       - "Остановить сервер"
-  deleteWorld:
+  deleteworld:
+    no-permission: "У тебя не хватает прав"
     name:  "Удалить мир"
     lore:
       - "Delete world"
+title:
+  server:
+    created: "Сервер успешно создан"
 server:
   create:
     success: "§aИдет создание сервера подождите минуту"

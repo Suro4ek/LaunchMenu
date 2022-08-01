@@ -16,6 +16,7 @@ import io.grpc.*;
 import io.grpc.stub.StreamObserver;
 import me.saiintbrisson.minecraft.ViewFrame;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -43,6 +44,18 @@ public final class LaunchMenu extends JavaPlugin {
     private List<ServerOuterClass.Plugin> plugins = new ArrayList<>();
     private List<ServerOuterClass.Version> versions = new ArrayList<>();
 
+    public LoadingCache<String, org.bukkit.entity.Player> waiters = CacheBuilder
+            .newBuilder()
+            .maximumSize(10)
+            .expireAfterWrite(1, TimeUnit.MINUTES)
+            .build(
+                    new CacheLoader<String, org.bukkit.entity.Player>() {
+                        @Override
+                        public org.bukkit.entity.Player load(String key) throws Exception {
+                            return Bukkit.getPlayerExact(key);
+                        }
+                    }
+            );
     //cache users
     public LoadingCache<String, UserOuterClass.UserM> users = CacheBuilder
             .newBuilder()
@@ -96,11 +109,12 @@ public final class LaunchMenu extends JavaPlugin {
                 if(getInstance().isEnabled()){
                     server.ListServers();
                     getServers().forEach(serverInfo -> {
-                        Bukkit.getOnlinePlayers().forEach(player -> {
-                            if(serverInfo.getVersion() != "" && serverInfo.getOwnerName().toLowerCase(Locale.ROOT).equals(player.getName().toLowerCase(Locale.ROOT))){
-                                player.sendTitle(new Title("У вас запустился сервре"));
-                            }
-                        });
+                       org.bukkit.entity.Player player = getWaiters().getIfPresent(serverInfo.getOwnerName());
+                       if(serverInfo.getVersion() != "" && player != null) {
+                           getWaiters().invalidate(serverInfo.getOwnerName());
+                           player.sendTitle(new Title(config.getString("title.server.created")));
+                           player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
+                       }
                     });
                 }
             }
@@ -147,6 +161,10 @@ public final class LaunchMenu extends JavaPlugin {
 
     public LoadingCache<String, UserOuterClass.UserM> getUsers() {
         return users;
+    }
+
+    public LoadingCache<String, org.bukkit.entity.Player> getWaiters() {
+        return waiters;
     }
 
     public void setServers(List<ServerOuterClass.ServerInfo> servers) {

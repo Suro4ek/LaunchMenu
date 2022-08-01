@@ -25,15 +25,15 @@ public class User {
         UserOuterClass.UserM userm = UserOuterClass.UserM.newBuilder().build();
         user.UserOuterClass.GetUserResponse user  = this.notBlockStub.getUser(UserOuterClass.GetUserRequest.
                 newBuilder().
-                setName(name.toLowerCase(Locale.ROOT)).
-                build());
+                setName(name).
+                buildPartial());
        userm = user.getUser();
        return userm;
     }
 
-    public void CreateUser(String name){
+    public void CreateUser(String name, String real_name){
         UserOuterClass.CreateUserRequest request = UserOuterClass.CreateUserRequest.newBuilder()
-                .setName(name).buildPartial();
+                .setName(name).setRealName(real_name).buildPartial();
         this.stub.createUser(request, new StreamObserver<UserOuterClass.Response>() {
             @Override
             public void onNext(UserOuterClass.Response value) {

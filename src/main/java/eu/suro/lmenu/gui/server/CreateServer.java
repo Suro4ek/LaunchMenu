@@ -56,6 +56,7 @@ public class CreateServer extends PaginatedView<ServerOuterClass.Version> {
             LaunchMenu.getInstance().server.CreateServer(e.getPlayer(),e.getPlayer().getName().toLowerCase(Locale.ROOT),
                     true, save_world, value.getId());
             e.getPlayer().sendMessage(config.getString("server.create.success"));
+            LaunchMenu.getInstance().getWaiters().refresh(e.getPlayer().getName().toLowerCase());
         }).closeOnClick();
     }
 }

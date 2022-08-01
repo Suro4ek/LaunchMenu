@@ -29,26 +29,25 @@ public class ServerSettings extends View {
         slot(3, stopServer).onClick((e) -> {
             LaunchMenu.getInstance().getUser().stopServer(e.getPlayer());
 //            LaunchMenu.getInstance().server.DeleteServer();
-        });
+        }).closeOnClick();
 
+        ItemStack deleteworld = new ItemStack(Material.DIRT);
+        ItemMeta deleteworldItemMeta = deleteworld.getItemMeta();
+        deleteworldItemMeta.setDisplayName(config.getString("settings.deleteworld.name"));
+        deleteworldItemMeta.setLore(config.getStringList("settings.deleteworld.lore"));
+        deleteworld.setItemMeta(deleteworldItemMeta);
+        slot(5, deleteworld).onClick(e -> {
+            if(!e.getPlayer().hasPermission(LaunchMenu.PERMISSION_SAVE)){
+                e.getPlayer().sendMessage(config.getString("settings.deleteworld.no-permission"));
+                return;
+            }
+            LaunchMenu.getInstance().getUser().RemoveWorld(e.getPlayer());
+        }).closeOnClick();
 //        slot(4, new ItemStack(Material.PLAYER_HEAD)).onClick((e) -> {e.open(MainFriends.class,
 //                new HashMap<String,Object>(){{
 //                    put("user",LaunchMenu.getInstance().getUsers().getIfPresent(e.getPlayer().getName()));
 //        }});});
     }
 
-    @Override
-    protected void onOpen(@NotNull OpenViewContext context) {
-        //Delete world
-        if(context.getPlayer().hasPermission(LaunchMenu.PERMISSION_SAVE)){
-            ItemStack deleteworld = new ItemStack(Material.BARRIER);
-            ItemMeta stopServerMeta = deleteworld.getItemMeta();
-            stopServerMeta.setDisplayName(config.getString("settings.deleteworld.name"));
-            stopServerMeta.setLore(config.getStringList("settings.deleteworld.lore"));
-            deleteworld.setItemMeta(stopServerMeta);
-            slot(5, deleteworld).onClick(e -> {
-                LaunchMenu.getInstance().getUser().RemoveWorld(e.getPlayer());
-            });
-        }
-    }
+
 }

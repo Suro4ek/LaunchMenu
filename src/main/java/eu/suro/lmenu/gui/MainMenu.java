@@ -33,9 +33,18 @@ public class MainMenu extends PaginatedView<ServerOuterClass.ServerInfo> {
                 "XOOOOOOOX",
                 "XXX<X>XXX"
         );
-
-        slot(5,5, new ItemStack(Material.BOOK));
-        slot(0,5,new ItemStack(Material.BEACON)).onClick((e) -> {
+        ItemStack bookItem = new ItemStack(Material.BOOK);
+        ItemMeta bookMeta = bookItem.getItemMeta();
+        bookMeta.setDisplayName(config.getString("main.book.title"));
+        bookMeta.setLore(config.getStringList("main.book.lore"));
+        bookItem.setItemMeta(bookMeta);
+        slot(5,5,bookItem);
+        ItemStack createServerItem = new ItemStack(Material.BEACON);
+        ItemMeta createServerMeta = createServerItem.getItemMeta();
+        createServerMeta.setDisplayName(config.getString("main.create-server.title"));
+        createServerMeta.setLore(config.getStringList("main.create-server.lore"));
+        createServerItem.setItemMeta(createServerMeta);
+        slot(0,5, createServerItem).onClick((e) -> {
             Player sender = e.getPlayer();
             LaunchMenu.getInstance().getView().open(CreateServer.class, sender,
                     new HashMap<String,Object>(){{
@@ -61,7 +70,8 @@ public class MainMenu extends PaginatedView<ServerOuterClass.ServerInfo> {
             return serverInfos;
         });
         //TODO as 2.5.3 version framework releaed, need to fix this
-//        scheduleUpdate(20L * 5);
+        scheduleUpdate(20L * 5);
+
         ItemStack nextPageItem = new ItemStack(Material.ARROW);
         ItemMeta nextPageItemMeta = nextPageItem.getItemMeta();
         nextPageItemMeta.setDisplayName(config.getString("main.nextPage"));
@@ -74,29 +84,6 @@ public class MainMenu extends PaginatedView<ServerOuterClass.ServerInfo> {
         setPreviousPageItem((context, item) -> item.withItem(previousPageItem));
     }
     //TODO as 2.5.2 version framework releaed, need to fix this
-//    @Override
-//    protected void onRender(@NotNull ViewContext context) {
-//        setSource((context1) -> {
-//            final UserOuterClass.UserM user = context1.get("user");
-//            List<ServerOuterClass.ServerInfo> serverInfos = LaunchMenu.getInstance().getServers().stream().filter(serverInfo -> {
-//                //if server is not open filter by friend list and if friend list is player then add list server else server not visible
-////                if (!serverInfo.getOpen()){
-//////                    if(user.getFriendsList().stream().filter(friend -> friend.getName() == serverInfo.getOwnerName()).collect(Collectors.toList()).size()>0){
-//////                        return true;
-//////                    }
-////                    return  false;
-////                }else{
-//                if(serverInfo.getVersion() == ""){
-//                    return false;
-//                }
-//                return true;
-////                }
-//            }).collect(Collectors.toList());
-//            return serverInfos;
-//        });
-//    }
-
-
     @Override
     protected void onItemRender(@NotNull PaginatedViewSlotContext<ServerOuterClass.ServerInfo> context,
                                 @NotNull ViewItem viewItem,
